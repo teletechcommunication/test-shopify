@@ -1,0 +1,203 @@
+{{ 'glayzyr-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glayzyr-sections.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id
+-%}
+
+<section
+  class="glayzyr-section glayzyr-categories"
+  data-glayzyr-section="categories"
+  data-section-id="{{ section_id }}"
+  style="
+    --glayzyr-bg: {{ s.background_color }};
+    --glayzyr-text: {{ s.text_color }};
+    --glayzyr-accent: {{ s.accent_color }};
+    --glayzyr-radius: {{ s.corner_radius }}px;
+    --glayzyr-pad-top: {{ s.padding_top }}px;
+    --glayzyr-pad-bottom: {{ s.padding_bottom }}px;
+    --glayzyr-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --glayzyr-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+    --glayzyr-overlay: {{ s.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  <div class="glayzyr-section__inner glayzyr-categories__grid">
+    {%- for i in (1..2) -%}
+      {%- liquid
+        if i == 1
+          assign eyebrow = s.one_eyebrow
+          assign heading = s.one_heading
+          assign description = s.one_description
+          assign cta = s.one_cta
+          assign link = s.one_link
+          assign image = s.one_image
+        else
+          assign eyebrow = s.two_eyebrow
+          assign heading = s.two_heading
+          assign description = s.two_description
+          assign cta = s.two_cta
+          assign link = s.two_link
+          assign image = s.two_image
+        endif
+        assign card_alt = heading | escape
+        if image.alt != blank
+          assign card_alt = image.alt | escape
+        endif
+      -%}
+
+      <a
+        class="glayzyr-categories__card"
+        href="{{ link | default: '#' }}"
+        data-glayzyr-reveal
+        style="--glayzyr-reveal-delay: {{ forloop.index0 | times: 120 }}ms;"
+      >
+        <div class="glayzyr-categories__media">
+          {%- if image != blank -%}
+            {{
+              image
+              | image_url: width: 1400
+              | image_tag: loading: 'lazy', widths: '400,600,800,1000,1400', sizes: '(max-width: 749px) 92vw, 46vw', alt: card_alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+
+        <div class="glayzyr-categories__content">
+          {%- if eyebrow != blank -%}
+            <p class="glayzyr-eyebrow">{{ eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if heading != blank -%}
+            <h3 class="glayzyr-heading glayzyr-categories__heading">{{ heading | escape }}</h3>
+          {%- endif -%}
+          {%- if description != blank -%}
+            <p class="glayzyr-body glayzyr-categories__body">{{ description | escape }}</p>
+          {%- endif -%}
+          {%- if cta != blank -%}
+            <span class="glayzyr-cta" aria-hidden="true">{{ cta | escape }}</span>
+          {%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section_id }} .glayzyr-section {
+    padding-block: var(--glayzyr-pad-top-mobile) var(--glayzyr-pad-bottom-mobile);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 2vw, 28px);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(360px, 62vw, 620px);
+    padding: clamp(22px, 3vw, 46px);
+    border-radius: var(--glayzyr-radius);
+    color: {{ s.card_text_color }};
+    overflow: hidden;
+    text-decoration: none;
+    isolation: isolate;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--glayzyr-text) 8%, var(--glayzyr-bg));
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__media img,
+  #shopify-section-{{ section_id }} .glayzyr-categories__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 900ms var(--glayzyr-ease);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / var(--glayzyr-overlay)) 0%, rgb(0 0 0 / 0) 65%);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__card:hover .glayzyr-categories__media img {
+    transform: scale(1.04);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__content {
+    max-width: 34ch;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__heading {
+    color: inherit;
+    font-size: clamp(1.8rem, 3.4vw, 3rem);
+    margin-bottom: 12px;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__body {
+    color: color-mix(in srgb, currentcolor 78%, transparent);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-categories__card .glayzyr-cta {
+    background: {{ s.button_background }};
+    color: {{ s.button_text_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section_id }} .glayzyr-section {
+      padding-block: var(--glayzyr-pad-top) var(--glayzyr-pad-bottom);
+    }
+
+    #shopify-section-{{ section_id }} .glayzyr-categories__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GLAYZYR categories",
+  "tag": "div",
+  "settings": [
+    { "type": "header", "content": "Category one" },
+    { "type": "text", "id": "one_eyebrow", "label": "Eyebrow", "default": "INTELLIGENCE IN VIEW" },
+    { "type": "text", "id": "one_heading", "label": "Heading", "default": "AI Smart Glasses" },
+    { "type": "text", "id": "one_description", "label": "Description", "default": "Intelligence, built into your everyday view." },
+    { "type": "text", "id": "one_cta", "label": "Button label", "default": "Explore AI Glasses →" },
+    { "type": "url", "id": "one_link", "label": "Link" },
+    { "type": "image_picker", "id": "one_image", "label": "Image" },
+    { "type": "header", "content": "Category two" },
+    { "type": "text", "id": "two_eyebrow", "label": "Eyebrow", "default": "TIMELESS DESIGN" },
+    { "type": "text", "id": "two_heading", "label": "Heading", "default": "Normal Glasses" },
+    { "type": "text", "id": "two_description", "label": "Description", "default": "Timeless frames, designed for everyday style." },
+    { "type": "text", "id": "two_cta", "label": "Button label", "default": "Explore Glasses →" },
+    { "type": "url", "id": "two_link", "label": "Link" },
+    { "type": "image_picker", "id": "two_image", "label": "Image" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Section text", "default": "#0a0a0a" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#ff4d00" },
+    { "type": "color", "id": "card_text_color", "label": "Card text", "default": "#ffffff" },
+    { "type": "color", "id": "button_background", "label": "Button background", "default": "#ffffff" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#0a0a0a" },
+    { "type": "range", "id": "overlay_opacity", "label": "Image overlay", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_top", "label": "Top spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 }
+  ],
+  "presets": [{ "name": "GLAYZYR categories" }]
+}
+{% endschema %}

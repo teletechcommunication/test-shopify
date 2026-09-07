@@ -1,0 +1,143 @@
+{{ 'glayzyr-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glayzyr-sections.js' | asset_url }}" defer></script>
+<script src="{{ 'glayzyr-curved-loop.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id
+  assign marquee_text = s.text | default: 'GLAYZYR' | escape
+  assign path_id = 'glayzyr-curve-' | append: section_id
+  # Curve amount maps to the control-point height of a single quadratic arc.
+  assign curve = s.curve | times: 1
+  assign control_y = 200 | minus: curve
+-%}
+
+<section
+  class="glayzyr-section glayzyr-curved-loop"
+  data-glayzyr-section="curved-loop"
+  data-section-id="{{ section_id }}"
+  data-speed="{{ s.speed }}"
+  data-direction="{{ s.direction }}"
+  data-draggable="{{ s.draggable }}"
+  style="
+    --glayzyr-bg: {{ s.background_color }};
+    --glayzyr-text: {{ s.text_color }};
+    --glayzyr-pad-top: {{ s.padding_top }}px;
+    --glayzyr-pad-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <svg
+    class="glayzyr-curved-loop__svg"
+    viewBox="0 0 1440 260"
+    preserveAspectRatio="xMidYMid meet"
+    role="img"
+    aria-label="{{ marquee_text }}"
+    focusable="false"
+  >
+    <defs>
+      <path id="{{ path_id }}" fill="none" d="M -200 200 Q 720 {{ control_y }} 1640 200" />
+    </defs>
+    <text class="glayzyr-curved-loop__text" data-glayzyr-text>
+      <textPath href="#{{ path_id }}" startOffset="0%" data-glayzyr-path>
+        {{ marquee_text }}
+      </textPath>
+    </text>
+  </svg>
+</section>
+
+<style>
+  #shopify-section-{{ section_id }} .glayzyr-curved-loop {
+    padding-inline: 0;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-curved-loop__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-curved-loop__text {
+    fill: var(--glayzyr-text);
+    font-family: var(--font-heading--family, inherit);
+    font-size: {{ s.font_size }}px;
+    font-weight: {{ s.font_weight }};
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-curved-loop[data-draggable='true'] {
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-curved-loop[data-dragging='true'] {
+    cursor: grabbing;
+  }
+
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section_id }} .glayzyr-curved-loop__text {
+      font-size: {{ s.font_size | times: 0.62 | round }}px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GLAYZYR curved loop",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Marquee text",
+      "default": "SEE THE FUTURE ✦ LIVE THE FUTURE ✦ WEAR THE FUTURE ✦ GLAYZYR ✦",
+      "info": "Repeated automatically to fill the curve."
+    },
+    { "type": "range", "id": "speed", "label": "Speed", "min": 0, "max": 100, "step": 5, "default": 30 },
+    {
+      "type": "range",
+      "id": "curve",
+      "label": "Curve amount",
+      "min": -160,
+      "max": 160,
+      "step": 10,
+      "default": 90,
+      "info": "Negative values arc downward."
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "left", "label": "Right to left" },
+        { "value": "right", "label": "Left to right" }
+      ],
+      "default": "left"
+    },
+    { "type": "checkbox", "id": "draggable", "label": "Allow pointer dragging", "default": true },
+    { "type": "header", "content": "Type" },
+    { "type": "range", "id": "font_size", "label": "Font size", "min": 24, "max": 160, "step": 4, "unit": "px", "default": 88 },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700"
+    },
+    { "type": "header", "content": "Colors & spacing" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#0a0a0a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Top spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "presets": [{ "name": "GLAYZYR curved loop" }]
+}
+{% endschema %}

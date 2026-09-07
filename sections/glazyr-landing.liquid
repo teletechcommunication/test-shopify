@@ -18,34 +18,10 @@
       <h2 data-glazyr-intro="two">{{ section.settings.intro_two }}</h2>
     </div>
 
-    <img class="glazyr-landing__glass" src="{{ product_image }}" alt="{{ section.settings.product_name }}">
+    <img class="glazyr-landing__glass" src="{{ product_image }}" alt="{{ section.settings.product_name }}" width="1920" height="1080">
 
     <div class="glazyr-landing__brand">{{ section.settings.product_name }}</div>
     <a class="glazyr-landing__top-cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
-  </div>
-
-  <div class="glazyr-landing__story">
-    <article class="glazyr-landing__story-row glazyr-landing__story-row--left">
-      <div>
-        <p class="glazyr-landing__eyebrow">01 / Wearable intelligence</p>
-        <h3>{{ section.settings.feature_one_heading }}</h3>
-        <p>{{ section.settings.feature_one_text }}</p>
-      </div>
-    </article>
-    <article class="glazyr-landing__story-row glazyr-landing__story-row--right">
-      <div>
-        <p class="glazyr-landing__eyebrow">02 / Hands-free vision</p>
-        <h3>{{ section.settings.feature_two_heading }}</h3>
-        <p>{{ section.settings.feature_two_text }}</p>
-      </div>
-    </article>
-    <article class="glazyr-landing__story-row glazyr-landing__story-row--left">
-      <div>
-        <p class="glazyr-landing__eyebrow">03 / All-day design</p>
-        <h3>{{ section.settings.feature_three_heading }}</h3>
-        <p>{{ section.settings.feature_three_text }}</p>
-      </div>
-    </article>
   </div>
 
   <div class="glazyr-landing__final">
@@ -66,14 +42,8 @@
   .glazyr-landing__brand, .glazyr-landing__top-cta { position: fixed; z-index: 5; top: 25px; }
   .glazyr-landing__brand { left: 32px; font-family: var(--font-heading--family); font-size: 1.35rem; font-weight: 700; letter-spacing: .08em; }
   .glazyr-landing__top-cta { right: 32px; color: #fff; background: #080808; padding: 12px 20px; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
-  .glazyr-landing__story { position: relative; z-index: 4; margin-top: -100vh; pointer-events: none; }
-  .glazyr-landing__story-row { min-height: 100vh; display: flex; align-items: center; padding: 10vw 8vw; }
-  .glazyr-landing__story-row--right { justify-content: flex-end; text-align: right; }
-  .glazyr-landing__story-row > div { max-width: 430px; }
-  .glazyr-landing__story h3 { margin: 0 0 18px; font-family: var(--font-heading--family); font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: .95; letter-spacing: -.04em; }
-  .glazyr-landing__story p:not(.glazyr-landing__eyebrow) { margin: 0; color: #666; font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.5; }
   .glazyr-landing__eyebrow { margin: 0 0 20px; color: var(--glazyr-accent); font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-  .glazyr-landing__final { min-height: 100vh; position: relative; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12vh 24px 14vh; text-align: center; }
+  .glazyr-landing__final { min-height: 100vh; position: relative; z-index: 4; margin-top: -100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12vh 24px 14vh; text-align: center; }
   .glazyr-landing__final h1 { margin: 0 0 42px; font-family: var(--font-heading--family); font-size: clamp(3.5rem, 9vw, 8rem); line-height: .88; letter-spacing: -.06em; text-transform: uppercase; }
   .glazyr-landing__button { background: #080808; color: #fff; padding: 16px 28px; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
   @media (max-width: 749px) {
@@ -143,12 +113,6 @@
     { "type": "text", "id": "product_name", "label": "Product name", "default": "GLAZYR" },
     { "type": "text", "id": "intro_one", "label": "First statement", "default": "See Beyond." },
     { "type": "text", "id": "intro_two", "label": "Second statement", "default": "Smartness, In Your Sight." },
-    { "type": "text", "id": "feature_one_heading", "label": "Feature one heading", "default": "Technology You Can Wear" },
-    { "type": "textarea", "id": "feature_one_text", "label": "Feature one text", "default": "Every component is miniaturized and optimized to fit seamlessly into a classic frame design." },
-    { "type": "text", "id": "feature_two_heading", "label": "Feature two heading", "default": "See. Capture. Connect." },
-    { "type": "textarea", "id": "feature_two_text", "label": "Feature two text", "default": "Experience the world without holding a screen. Capture moments exactly as you see them." },
-    { "type": "text", "id": "feature_three_heading", "label": "Feature three heading", "default": "Designed Around You" },
-    { "type": "textarea", "id": "feature_three_text", "label": "Feature three text", "default": "Lightweight, durable materials ensure all-day comfort while maintaining a premium aesthetic." },
     { "type": "text", "id": "final_heading", "label": "Final heading", "default": "The New Reality." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Buy now" },
     { "type": "url", "id": "button_link", "label": "Button link", "default": "/collections/all" },

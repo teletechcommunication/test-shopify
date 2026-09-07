@@ -1,0 +1,273 @@
+{{ 'glayzyr-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glayzyr-sections.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id
+-%}
+
+<section
+  class="glayzyr-section glayzyr-testimonials"
+  data-glayzyr-section="testimonials"
+  data-section-id="{{ section_id }}"
+  style="
+    --glayzyr-bg: {{ s.background_color }};
+    --glayzyr-text: {{ s.text_color }};
+    --glayzyr-accent: {{ s.accent_color }};
+    --glayzyr-radius: {{ s.corner_radius }}px;
+    --glayzyr-pad-top: {{ s.padding_top }}px;
+    --glayzyr-pad-bottom: {{ s.padding_bottom }}px;
+    --glayzyr-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --glayzyr-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+  "
+>
+  <div class="glayzyr-section__inner">
+    {%- if s.eyebrow != blank or s.heading != blank -%}
+      <header class="glayzyr-testimonials__header">
+        {%- if s.eyebrow != blank -%}
+          <p class="glayzyr-eyebrow" data-glayzyr-reveal>{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="glayzyr-heading" data-glayzyr-reveal style="--glayzyr-reveal-delay: 80ms;">
+            {{ s.heading | escape }}
+          </h2>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="glayzyr-testimonials__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign is_featured = false
+          if forloop.first
+            assign is_featured = true
+          endif
+          assign rating_percent = b.rating | times: 20
+          assign avatar_alt = b.name | escape
+        -%}
+
+        <figure
+          class="glayzyr-testimonials__card{% if is_featured %} glayzyr-testimonials__card--featured{% endif %}"
+          data-glayzyr-reveal
+          style="--glayzyr-reveal-delay: {{ forloop.index0 | times: 90 }}ms;"
+          {{ block.shopify_attributes }}
+        >
+          {%- if is_featured -%}
+            <span class="glayzyr-testimonials__mark" aria-hidden="true">&ldquo;</span>
+          {%- endif -%}
+
+          <blockquote class="glayzyr-testimonials__quote">{{ b.quote | escape }}</blockquote>
+
+          <figcaption class="glayzyr-testimonials__meta">
+            {%- if b.avatar != blank -%}
+              {{
+                b.avatar
+                | image_url: width: 160
+                | image_tag: loading: 'lazy', widths: '80,120,160', sizes: '56px', alt: avatar_alt, class: 'glayzyr-testimonials__avatar'
+              }}
+            {%- endif -%}
+
+            <div>
+              {%- if b.rating > 0 -%}
+                <div
+                  class="glayzyr-rating"
+                  style="--glayzyr-rating-fill: {{ rating_percent }}%;"
+                  role="img"
+                  aria-label="{{ b.rating }} out of 5 stars"
+                >
+                  <span class="glayzyr-rating__stars" aria-hidden="true">
+                    <span class="glayzyr-rating__fill"></span>
+                  </span>
+                </div>
+              {%- endif -%}
+
+              {%- if b.name != blank -%}
+                <p class="glayzyr-testimonials__name">{{ b.name | escape }}</p>
+              {%- endif -%}
+              {%- if b.role != blank -%}
+                <p class="glayzyr-testimonials__role">{{ b.role | escape }}</p>
+              {%- endif -%}
+            </div>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section_id }} .glayzyr-section {
+    padding-block: var(--glayzyr-pad-top-mobile) var(--glayzyr-pad-bottom-mobile);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__header {
+    margin-bottom: clamp(28px, 4vw, 56px);
+    max-width: 46ch;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(14px, 2vw, 24px);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0;
+    padding: clamp(24px, 3vw, 40px);
+    border: 1px solid color-mix(in srgb, var(--glayzyr-text) 12%, transparent);
+    border-radius: var(--glayzyr-radius);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__card--featured {
+    background: color-mix(in srgb, var(--glayzyr-text) 5%, var(--glayzyr-bg));
+    border-color: transparent;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__mark {
+    font-family: var(--font-heading--family, inherit);
+    font-size: clamp(4rem, 9vw, 7rem);
+    line-height: 0.6;
+    color: var(--glayzyr-accent);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__quote {
+    margin: 0;
+    font-family: var(--font-heading--family, inherit);
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__card--featured .glayzyr-testimonials__quote {
+    font-size: clamp(1.6rem, 3.4vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__name {
+    margin: 6px 0 0;
+    font-weight: 600;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-testimonials__role {
+    margin: 2px 0 0;
+    color: var(--glayzyr-muted);
+    font-size: 0.85rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section_id }} .glayzyr-section {
+      padding-block: var(--glayzyr-pad-top) var(--glayzyr-pad-bottom);
+    }
+
+    #shopify-section-{{ section_id }} .glayzyr-testimonials__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* The lead testimonial claims a full-height editorial column. */
+    #shopify-section-{{ section_id }} .glayzyr-testimonials__card--featured {
+      grid-row: span 2;
+      grid-column: span 2;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section_id }} .glayzyr-testimonials__card--featured {
+      grid-column: span 1;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GLAYZYR testimonials",
+  "tag": "div",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "IN THEIR WORDS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Worn every day, everywhere." },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#0a0a0a" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#ff4d00" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "padding_top", "label": "Top spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "GLAYZYR completely changed how I think about everyday eyewear." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Alex Morgan" },
+        { "type": "text", "id": "role", "label": "Role or location", "default": "Designer, Berlin" },
+        { "type": "range", "id": "rating", "label": "Rating", "min": 0, "max": 5, "step": 0.5, "default": 5 },
+        { "type": "image_picker", "id": "avatar", "label": "Avatar" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GLAYZYR testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "GLAYZYR completely changed how I think about everyday eyewear.",
+            "name": "Alex Morgan",
+            "role": "Designer, Berlin"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Light enough to forget, smart enough to keep up with a full day.",
+            "name": "Priya Raman",
+            "role": "Product lead, Bengaluru"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The build quality is the first thing everyone comments on.",
+            "name": "Jonah Reid",
+            "role": "Photographer, Lisbon"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a pair that looks like eyewear first and technology second.",
+            "name": "Mei Lin",
+            "role": "Architect, Singapore"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

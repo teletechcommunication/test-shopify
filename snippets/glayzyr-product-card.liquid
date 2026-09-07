@@ -1,0 +1,89 @@
+{% comment %}
+  Portable GLAYZYR product card.
+
+  One markup structure serving two presentations: the focal "feature" variant
+  (description + add to cart) and the compact "depth" variant used for the
+  surrounding cards of the depth carousel.
+
+  Accepts:
+  - product: {Product} required
+  - variant: {String} 'feature' | 'depth' (default 'depth')
+  - image_size: {Number} widest srcset entry in px (default 900)
+  - lazy: {Boolean} lazy-load the image (default true)
+  - show_add_to_cart: {Boolean}
+  - fallback_rating / fallback_count: {Number} passed through to glayzyr-rating
+
+  Usage:
+  {% render 'glayzyr-product-card', product: product, variant: 'feature' %}
+{% endcomment %}
+
+{%- liquid
+  assign card_variant = variant | default: 'depth'
+  assign is_feature = false
+  if card_variant == 'feature'
+    assign is_feature = true
+  endif
+  assign max_width = image_size | default: 900
+  assign loading_attr = 'lazy'
+  if lazy == false
+    assign loading_attr = 'eager'
+  endif
+  assign card_alt = product.title | escape
+  if product.featured_image.alt != blank
+    assign card_alt = product.featured_image.alt | escape
+  endif
+-%}
+
+{%- if product != blank and product != empty -%}
+  <article class="glayzyr-card glayzyr-card--{{ card_variant }}">
+    <a class="glayzyr-card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      {%- if product.featured_image -%}
+        {{
+          product.featured_image
+          | image_url: width: max_width
+          | image_tag: loading: loading_attr, widths: '200,300,400,600,800,1000', sizes: '(max-width: 749px) 70vw, 30vw', alt: card_alt
+        }}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </a>
+
+    <div class="glayzyr-card__body">
+      <h3 class="glayzyr-card__title">
+        <a href="{{ product.url }}">{{ product.title | escape }}</a>
+      </h3>
+
+      {% render 'glayzyr-rating',
+        product: product,
+        show_count: true,
+        fallback_rating: fallback_rating,
+        fallback_count: fallback_count
+      %}
+
+      {%- if is_feature and product.description != blank -%}
+        <p class="glayzyr-card__description">{{ product.description | strip_html | truncate: 130 }}</p>
+      {%- endif -%}
+
+      <div class="glayzyr-card__price">
+        {{ product.price | money }}
+        {%- if product.compare_at_price > product.price -%}
+          <s>{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+      </div>
+
+      {%- if is_feature -%}
+        <div class="glayzyr-card__actions">
+          {%- if show_add_to_cart and product.available -%}
+            {%- form 'product', product, class: 'glayzyr-card__form' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button class="glayzyr-cta" type="submit" name="add">Add to cart</button>
+            {%- endform -%}
+          {%- elsif show_add_to_cart -%}
+            <button class="glayzyr-cta" type="button" disabled>Sold out</button>
+          {%- endif -%}
+          <a class="glayzyr-cta glayzyr-cta--ghost" href="{{ product.url }}">View product</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </article>
+{%- endif -%}

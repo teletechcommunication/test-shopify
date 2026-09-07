@@ -1,0 +1,226 @@
+/* GLAYZYR depth showcase — center-focused 3D carousel.
+   Every slide is absolutely centred; JS writes only per-slide custom properties
+   (offset from centre, depth, opacity, blur) so the composition stays
+   symmetrical: DEPTH DEPTH DEPTH [MAIN] DEPTH DEPTH DEPTH. */
+
+.glayzyr-depth__header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: clamp(28px, 4vw, 56px);
+}
+
+.glayzyr-depth__link {
+  align-self: flex-start;
+  color: var(--glayzyr-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border-bottom: 1px solid currentcolor;
+  padding-bottom: 2px;
+}
+
+.glayzyr-depth {
+  --glayzyr-card-width: min(74vw, 300px);
+  --glayzyr-depth-viewport: clamp(420px, 108vw, 560px);
+}
+
+@media screen and (min-width: 750px) {
+  .glayzyr-depth {
+    --glayzyr-card-width: 320px;
+    --glayzyr-depth-viewport: 560px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .glayzyr-depth {
+    --glayzyr-card-width: 360px;
+    --glayzyr-depth-viewport: 620px;
+  }
+}
+
+.glayzyr-depth__viewport {
+  position: relative;
+  height: var(--glayzyr-depth-viewport);
+  perspective: 1600px;
+  perspective-origin: 50% 50%;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.glayzyr-depth__viewport[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.glayzyr-depth__track {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+}
+
+.glayzyr-depth__slide {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  width: var(--glayzyr-card-width, 300px);
+  /* JS-provided per-slide placement. */
+  --glayzyr-x: 0px;
+  --glayzyr-z: 0px;
+  --glayzyr-rotate: 0deg;
+  --glayzyr-scale: 1;
+  --glayzyr-blur: 0px;
+  --glayzyr-fade: 1;
+
+  transform: translate3d(calc(-50% + var(--glayzyr-x)), -50%, var(--glayzyr-z)) rotateY(var(--glayzyr-rotate))
+    scale(var(--glayzyr-scale));
+  opacity: var(--glayzyr-fade);
+  filter: blur(var(--glayzyr-blur));
+  transition:
+    transform 620ms var(--glayzyr-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    opacity 620ms var(--glayzyr-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    filter 620ms var(--glayzyr-ease, cubic-bezier(0.22, 1, 0.36, 1));
+  will-change: transform, opacity;
+}
+
+/* Slides beyond the configured depth window are removed from layout and a11y. */
+.glayzyr-depth__slide[hidden] {
+  display: none !important;
+}
+
+.glayzyr-depth__slide-inner {
+  position: relative;
+}
+
+.glayzyr-depth__slide-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--glayzyr-radius);
+  background: color-mix(in srgb, var(--glayzyr-bg) 100%, transparent);
+  opacity: var(--glayzyr-tint, 0);
+  pointer-events: none;
+  transition: opacity 620ms var(--glayzyr-ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+/* Side cards keep image, title, rating and price only. */
+.glayzyr-depth__slide:not([data-current]) .glayzyr-card__description,
+.glayzyr-depth__slide:not([data-current]) .glayzyr-card__actions {
+  display: none;
+}
+
+.glayzyr-depth__slide:not([data-current]) .glayzyr-card {
+  pointer-events: none;
+}
+
+.glayzyr-depth__slide[data-current] {
+  z-index: 5;
+}
+
+.glayzyr-depth__slide[data-current] .glayzyr-card {
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.55);
+}
+
+.glayzyr-depth__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(24px, 3vw, 44px);
+  padding-inline: 18px;
+}
+
+.glayzyr-depth__arrow {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--glayzyr-text) 28%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--glayzyr-text);
+  cursor: pointer;
+  transition: background 200ms, color 200ms;
+}
+
+.glayzyr-depth__arrow:hover {
+  background: var(--glayzyr-text);
+  color: var(--glayzyr-bg);
+}
+
+.glayzyr-depth__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.glayzyr-depth__dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.glayzyr-depth__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--glayzyr-text) 30%, transparent);
+  cursor: pointer;
+  transition: width 300ms, background 300ms;
+}
+
+.glayzyr-depth__dot[aria-selected='true'] {
+  width: 26px;
+  border-radius: 999px;
+  background: var(--glayzyr-accent);
+}
+
+.glayzyr-depth__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 750px) {
+  .glayzyr-depth__header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .glayzyr-depth__link {
+    align-self: flex-end;
+    white-space: nowrap;
+  }
+}
+
+/* Without 3D transforms the carousel degrades to a plain scroll-snap row. */
+@supports not (transform-style: preserve-3d) {
+  .glayzyr-depth__track {
+    position: static;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .glayzyr-depth__slide {
+    position: static;
+    flex: 0 0 min(78vw, 320px);
+    transform: none;
+    opacity: 1;
+    filter: none;
+    scroll-snap-align: center;
+  }
+}

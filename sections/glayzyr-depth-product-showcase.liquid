@@ -1,0 +1,208 @@
+{{ 'glayzyr-sections.css' | asset_url | stylesheet_tag }}
+{{ 'glayzyr-depth-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glayzyr-sections.js' | asset_url }}" defer></script>
+<script src="{{ 'glayzyr-depth-carousel.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id
+  assign products = s.collection.products
+  assign limit = s.product_count
+  assign count = products.size
+  if count > limit
+    assign count = limit
+  endif
+-%}
+
+<section
+  class="glayzyr-section glayzyr-depth"
+  data-glayzyr-section="depth-carousel"
+  data-section-id="{{ section_id }}"
+  data-autoplay="{{ s.autoplay }}"
+  data-autoplay-speed="{{ s.autoplay_speed }}"
+  data-visible-sides="{{ s.visible_sides }}"
+  data-spread="{{ s.spread }}"
+  data-depth="{{ s.depth }}"
+  data-tilt="{{ s.tilt }}"
+  style="
+    --glayzyr-bg: {{ s.background_color }};
+    --glayzyr-text: {{ s.text_color }};
+    --glayzyr-accent: {{ s.accent_color }};
+    --glayzyr-button-bg: {{ s.button_background }};
+    --glayzyr-button-text: {{ s.button_text_color }};
+    --glayzyr-radius: {{ s.corner_radius }}px;
+    --glayzyr-pad-top: {{ s.padding_top }}px;
+    --glayzyr-pad-bottom: {{ s.padding_bottom }}px;
+    --glayzyr-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --glayzyr-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+  "
+>
+  <div class="glayzyr-section__inner">
+    <header class="glayzyr-depth__header">
+      <div>
+        {%- if s.eyebrow != blank -%}
+          <p class="glayzyr-eyebrow" data-glayzyr-reveal>{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="glayzyr-heading" data-glayzyr-reveal style="--glayzyr-reveal-delay: 80ms;">
+            {{ s.heading | escape }}
+          </h2>
+        {%- endif -%}
+        {%- if s.description != blank -%}
+          <p class="glayzyr-body" data-glayzyr-reveal style="--glayzyr-reveal-delay: 160ms;">
+            {{ s.description | escape }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- if s.link_label != blank and s.link_url != blank -%}
+        <a class="glayzyr-depth__link" href="{{ s.link_url }}">{{ s.link_label | escape }}</a>
+      {%- endif -%}
+    </header>
+  </div>
+
+  {%- if count > 0 -%}
+    <div
+      class="glayzyr-depth__viewport"
+      data-glayzyr-viewport
+      tabindex="0"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="{{ s.heading | default: 'Products' | escape }}"
+    >
+      <ul class="glayzyr-depth__track" data-glayzyr-track>
+        {%- for product in products limit: limit -%}
+          <li class="glayzyr-depth__slide" data-glayzyr-slide data-index="{{ forloop.index0 }}">
+            {%- comment -%}
+              Every slide renders the full card; CSS reveals the description and
+              actions only on the centered slide, so promoting a card costs no
+              re-render and no second copy of the image.
+            {%- endcomment -%}
+            <div class="glayzyr-depth__slide-inner">
+              {% render 'glayzyr-product-card',
+                product: product,
+                variant: 'feature',
+                image_size: 1000,
+                show_add_to_cart: s.show_add_to_cart,
+                fallback_rating: s.fallback_rating,
+                fallback_count: s.fallback_count
+              %}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <p class="glayzyr-depth__status visually-hidden" aria-live="polite" data-glayzyr-status></p>
+    </div>
+
+    <div class="glayzyr-depth__controls">
+      <button class="glayzyr-depth__arrow" type="button" data-glayzyr-prev aria-label="Previous product">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="glayzyr-depth__dots" data-glayzyr-dots role="tablist" aria-label="Choose product">
+        {%- for product in products limit: limit -%}
+          <button
+            class="glayzyr-depth__dot"
+            type="button"
+            role="tab"
+            data-glayzyr-dot
+            data-index="{{ forloop.index0 }}"
+            aria-label="{{ product.title | escape }}"
+            aria-selected="false"
+          ></button>
+        {%- endfor -%}
+      </div>
+
+      <button class="glayzyr-depth__arrow" type="button" data-glayzyr-next aria-label="Next product">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  {%- else -%}
+    <div class="glayzyr-section__inner">
+      <p class="glayzyr-body">
+        Select a collection in the theme editor to display products here.
+      </p>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #shopify-section-{{ section_id }} .glayzyr-section {
+    padding-block: var(--glayzyr-pad-top-mobile) var(--glayzyr-pad-bottom-mobile);
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section_id }} .glayzyr-section {
+      padding-block: var(--glayzyr-pad-top) var(--glayzyr-pad-bottom);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GLAYZYR depth showcase",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE COLLECTION" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Explore the Collection" },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover eyewear designed to move with you."
+    },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View All Products →" },
+    { "type": "url", "id": "link_url", "label": "Link" },
+    { "type": "header", "content": "Products" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "product_count", "label": "Products shown", "min": 3, "max": 16, "step": 1, "default": 7 },
+    { "type": "checkbox", "id": "show_add_to_cart", "label": "Show add to cart", "default": true },
+    { "type": "header", "content": "Rating fallback" },
+    {
+      "type": "range",
+      "id": "fallback_rating",
+      "label": "Placeholder rating",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "default": 4.8,
+      "info": "Used only when a product has no reviews.rating metafield."
+    },
+    { "type": "range", "id": "fallback_count", "label": "Placeholder review count", "min": 0, "max": 500, "step": 1, "default": 124 },
+    { "type": "header", "content": "Depth & motion" },
+    {
+      "type": "range",
+      "id": "visible_sides",
+      "label": "Depth cards per side",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "info": "Reduced automatically on smaller screens."
+    },
+    { "type": "range", "id": "spread", "label": "Horizontal spread", "min": 40, "max": 140, "step": 5, "unit": "%", "default": 82 },
+    { "type": "range", "id": "depth", "label": "Depth falloff", "min": 0, "max": 100, "step": 5, "default": 60 },
+    { "type": "range", "id": "tilt", "label": "Perspective tilt", "min": 0, "max": 45, "step": 1, "unit": "deg", "default": 22 },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": false },
+    { "type": "range", "id": "autoplay_speed", "label": "Autoplay speed", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#0a0a0a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#ffffff" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#ff4d00" },
+    { "type": "color", "id": "button_background", "label": "Button background", "default": "#ffffff" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#0a0a0a" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "padding_top", "label": "Top spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 }
+  ],
+  "presets": [{ "name": "GLAYZYR depth showcase" }]
+}
+{% endschema %}

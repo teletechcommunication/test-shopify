@@ -1,0 +1,97 @@
+{% comment %}
+  Portable GLAYZYR banner tile — shared by the feature banner and the
+  three-banner promo area so both keep identical cropping and overlay behaviour.
+
+  Accepts:
+  - image / mobile_image: {Image}
+  - eyebrow, heading, description, cta, link: {String}
+  - overlay: {Number} 0–100 overlay strength
+  - text_color, button_background, button_text: {String} CSS colors
+  - classes: {String} extra class names for the wrapper
+  - heading_tag: {String} defaults to 'h2'
+  - lazy: {Boolean} defaults true
+{% endcomment %}
+
+{%- liquid
+  assign tag = heading_tag | default: 'h2'
+  assign loading_attr = 'lazy'
+  if lazy == false
+    assign loading_attr = 'eager'
+  endif
+  assign banner_alt = heading | default: '' | escape
+  if image.alt != blank
+    assign banner_alt = image.alt | escape
+  endif
+  assign has_link = false
+  if link != blank
+    assign has_link = true
+  endif
+-%}
+
+<div
+  class="glayzyr-banner {{ classes }}"
+  style="--glayzyr-banner-overlay: {{ overlay | default: 45 | divided_by: 100.0 }}; color: {{ text_color | default: '#ffffff' }};"
+>
+  <div class="glayzyr-banner__media">
+    {%- if mobile_image != blank -%}
+      <picture>
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ mobile_image | image_url: width: 900 }} 900w, {{ mobile_image | image_url: width: 1200 }} 1200w"
+          sizes="100vw"
+        >
+        {%- if image != blank -%}
+          {{
+            image
+            | image_url: width: 2200
+            | image_tag: loading: loading_attr, widths: '600,900,1200,1600,2200', sizes: '100vw', alt: banner_alt
+          }}
+        {%- else -%}
+          {{
+            mobile_image
+            | image_url: width: 1200
+            | image_tag: loading: loading_attr, widths: '600,900,1200', sizes: '100vw', alt: banner_alt
+          }}
+        {%- endif -%}
+      </picture>
+    {%- elsif image != blank -%}
+      {{
+        image
+        | image_url: width: 2200
+        | image_tag: loading: loading_attr, widths: '600,900,1200,1600,2200', sizes: '100vw', alt: banner_alt
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag }}
+    {%- endif -%}
+  </div>
+
+  <div class="glayzyr-banner__content">
+    {%- if eyebrow != blank -%}
+      <p class="glayzyr-eyebrow" data-glayzyr-reveal>{{ eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if heading != blank -%}
+      <{{ tag }} class="glayzyr-heading glayzyr-banner__heading" data-glayzyr-reveal style="--glayzyr-reveal-delay: 80ms;">
+        {{- heading | escape -}}
+      </{{ tag }}>
+    {%- endif -%}
+    {%- if description != blank -%}
+      <p class="glayzyr-body glayzyr-banner__body" data-glayzyr-reveal style="--glayzyr-reveal-delay: 160ms;">
+        {{- description | escape -}}
+      </p>
+    {%- endif -%}
+    {%- if cta != blank and has_link -%}
+      <a
+        class="glayzyr-cta"
+        href="{{ link }}"
+        data-glayzyr-reveal
+        style="--glayzyr-reveal-delay: 240ms; background: {{ button_background | default: '#ffffff' }}; color: {{ button_text | default: '#0a0a0a' }};"
+      >
+        {{ cta | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+
+  {%- if has_link -%}
+    <a class="glayzyr-banner__overlay-link" href="{{ link }}" tabindex="-1" aria-hidden="true"></a>
+  {%- endif -%}
+</div>

@@ -6,201 +6,169 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "glazyr_landing": {
       "type": "glazyr-landing",
       "settings": {}
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "glayzyr_intro": {
+      "type": "glayzyr-smart-glasses-intro",
+      "settings": {}
+    },
+    "glayzyr_curved_loop": {
+      "type": "glayzyr-curved-loop",
+      "settings": {}
+    },
+    "glayzyr_categories": {
+      "type": "glayzyr-categories",
+      "settings": {}
+    },
+    "glayzyr_feature_banner": {
+      "type": "glayzyr-feature-banner",
+      "settings": {}
+    },
+    "glayzyr_depth_showcase": {
+      "type": "glayzyr-depth-product-showcase",
+      "settings": {
+        "collection": "all"
+      }
+    },
+    "glayzyr_promo_banners": {
+      "type": "glayzyr-promo-banners",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "promo_lead": {
+          "type": "banner",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "eyebrow": "THE FLAGSHIP",
+            "heading": "Vision, redefined for every hour of the day.",
+            "description": "Placeholder promotional copy for the flagship GLAYZYR release.",
+            "button_label": "Explore the flagship →"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "promo_two": {
+          "type": "banner",
           "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "eyebrow": "NEW ARRIVALS",
+            "heading": "Frames just landed",
+            "button_label": "Shop new →"
+          }
+        },
+        "promo_three": {
+          "type": "banner",
+          "settings": {
+            "eyebrow": "ACCESSORIES",
+            "heading": "Built to travel",
+            "button_label": "Shop accessories →"
+          }
         }
       },
-      "name": "t:names.product_list",
-      "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      }
+      "block_order": ["promo_lead", "promo_two", "promo_three"],
+      "settings": {}
+    },
+    "glayzyr_testimonials": {
+      "type": "glayzyr-testimonials",
+      "blocks": {
+        "testimonial_one": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "GLAYZYR completely changed how I think about everyday eyewear.",
+            "name": "Alex Morgan",
+            "role": "Designer, Berlin",
+            "rating": 5
+          }
+        },
+        "testimonial_two": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Light enough to forget, smart enough to keep up with a full day.",
+            "name": "Priya Raman",
+            "role": "Product lead, Bengaluru",
+            "rating": 5
+          }
+        },
+        "testimonial_three": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The build quality is the first thing everyone comments on.",
+            "name": "Jonah Reid",
+            "role": "Photographer, Lisbon",
+            "rating": 4.5
+          }
+        },
+        "testimonial_four": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a pair that looks like eyewear first and technology second.",
+            "name": "Mei Lin",
+            "role": "Architect, Singapore",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": ["testimonial_one", "testimonial_two", "testimonial_three", "testimonial_four"],
+      "settings": {}
+    },
+    "glayzyr_faq": {
+      "type": "glayzyr-faq",
+      "blocks": {
+        "faq_one": {
+          "type": "question",
+          "settings": {
+            "question": "What makes GLAYZYR different?",
+            "answer": "<p>Every frame is engineered as eyewear first, with the technology miniaturised to disappear into a classic silhouette.</p>"
+          }
+        },
+        "faq_two": {
+          "type": "question",
+          "settings": {
+            "question": "Do GLAYZYR smart glasses require a phone?",
+            "answer": "<p>Core features work standalone. Pairing a phone unlocks notifications, navigation and instant sharing.</p>"
+          }
+        },
+        "faq_three": {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose the right frame?",
+            "answer": "<p>Use the fit guide on each product page, or start with our most adaptable universal-fit silhouette.</p>"
+          }
+        },
+        "faq_four": {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard delivery arrives in 3–5 business days. Express options are available at checkout.</p>"
+          }
+        },
+        "faq_five": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return my glasses?",
+            "answer": "<p>Returns are accepted within 30 days of delivery, provided the frames are unworn and in original packaging.</p>"
+          }
+        },
+        "faq_six": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer warranty support?",
+            "answer": "<p>Every pair includes a two-year limited warranty covering manufacturing defects.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_one", "faq_two", "faq_three", "faq_four", "faq_five", "faq_six"],
+      "settings": {}
     }
   },
   "order": [
     "glazyr_landing",
-    "product_list_fa6P9H"
+    "glayzyr_intro",
+    "glayzyr_curved_loop",
+    "glayzyr_categories",
+    "glayzyr_feature_banner",
+    "glayzyr_depth_showcase",
+    "glayzyr_promo_banners",
+    "glayzyr_testimonials",
+    "glayzyr_faq"
   ]
 }

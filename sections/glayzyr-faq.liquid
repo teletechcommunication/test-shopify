@@ -1,0 +1,249 @@
+{{ 'glayzyr-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glayzyr-sections.js' | asset_url }}" defer></script>
+<script src="{{ 'glayzyr-faq.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id
+-%}
+
+<section
+  class="glayzyr-section glayzyr-faq"
+  data-glayzyr-section="faq"
+  data-section-id="{{ section_id }}"
+  data-single-open="{{ s.single_open }}"
+  style="
+    --glayzyr-bg: {{ s.background_color }};
+    --glayzyr-text: {{ s.text_color }};
+    --glayzyr-accent: {{ s.accent_color }};
+    --glayzyr-pad-top: {{ s.padding_top }}px;
+    --glayzyr-pad-bottom: {{ s.padding_bottom }}px;
+    --glayzyr-pad-top-mobile: {{ s.padding_top_mobile }}px;
+    --glayzyr-pad-bottom-mobile: {{ s.padding_bottom_mobile }}px;
+  "
+>
+  <div class="glayzyr-section__inner glayzyr-faq__grid">
+    <div class="glayzyr-faq__intro">
+      {%- if s.eyebrow != blank -%}
+        <p class="glayzyr-eyebrow" data-glayzyr-reveal>{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h2 class="glayzyr-heading" data-glayzyr-reveal style="--glayzyr-reveal-delay: 80ms;">
+          {{ s.heading | escape }}
+        </h2>
+      {%- endif -%}
+      {%- if s.description != blank -%}
+        <p class="glayzyr-body" data-glayzyr-reveal style="--glayzyr-reveal-delay: 160ms;">
+          {{ s.description | escape }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    <div class="glayzyr-faq__list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign panel_id = 'glayzyr-faq-panel-' | append: section_id | append: '-' | append: block.id
+          assign button_id = 'glayzyr-faq-button-' | append: section_id | append: '-' | append: block.id
+        -%}
+        <div class="glayzyr-faq__item" data-faq-item {{ block.shopify_attributes }}>
+          <h3 class="glayzyr-faq__question">
+            <button
+              class="glayzyr-faq__trigger"
+              type="button"
+              id="{{ button_id }}"
+              aria-expanded="false"
+              aria-controls="{{ panel_id }}"
+              data-faq-trigger
+            >
+              <span>{{ b.question | escape }}</span>
+              <svg class="glayzyr-faq__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </h3>
+
+          <div class="glayzyr-faq__panel" id="{{ panel_id }}" role="region" aria-labelledby="{{ button_id }}" data-faq-panel hidden>
+            <div class="glayzyr-faq__answer glayzyr-body">{{ b.answer }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section_id }} .glayzyr-section {
+    padding-block: var(--glayzyr-pad-top-mobile) var(--glayzyr-pad-bottom-mobile);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 4vw, 72px);
+    align-items: start;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__item {
+    border-top: 1px solid color-mix(in srgb, var(--glayzyr-text) 15%, transparent);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__item:last-child {
+    border-bottom: 1px solid color-mix(in srgb, var(--glayzyr-text) 15%, transparent);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__question {
+    margin: 0;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: clamp(18px, 2.2vw, 26px) 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__icon {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    color: var(--glayzyr-accent);
+    transition: transform 320ms var(--glayzyr-ease);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__trigger[aria-expanded='true'] .glayzyr-faq__icon {
+    transform: rotate(135deg);
+  }
+
+  /* JS drives the height so the panel can animate open and closed. */
+  #shopify-section-{{ section_id }} .glayzyr-faq__panel {
+    overflow: hidden;
+    height: 0;
+    transition: height 340ms var(--glayzyr-ease);
+  }
+
+  #shopify-section-{{ section_id }} .glayzyr-faq__answer {
+    padding-bottom: clamp(18px, 2.2vw, 26px);
+    max-width: 68ch;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section_id }} .glayzyr-section {
+      padding-block: var(--glayzyr-pad-top) var(--glayzyr-pad-bottom);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section_id }} .glayzyr-faq__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+
+    #shopify-section-{{ section_id }} .glayzyr-faq__intro {
+      position: sticky;
+      top: 96px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section_id }} .glayzyr-faq__panel {
+      transition: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GLAYZYR FAQ",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "GOOD TO KNOW" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently asked questions" },
+    { "type": "text", "id": "description", "label": "Description", "default": "Everything you need before you choose your frame." },
+    {
+      "type": "checkbox",
+      "id": "single_open",
+      "label": "Open one answer at a time",
+      "default": true
+    },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#0a0a0a" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#ff4d00" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "padding_top", "label": "Top spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom spacing", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom spacing (mobile)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 56 }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What makes GLAYZYR different?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Placeholder answer copy.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GLAYZYR FAQ",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "What makes GLAYZYR different?",
+            "answer": "<p>Every frame is engineered as eyewear first, with the technology miniaturised to disappear into a classic silhouette.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do GLAYZYR smart glasses require a phone?",
+            "answer": "<p>Core features work standalone. Pairing a phone unlocks notifications, navigation and instant sharing.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose the right frame?",
+            "answer": "<p>Use the fit guide on each product page, or start with our most adaptable universal-fit silhouette.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard delivery arrives in 3–5 business days. Express options are available at checkout.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Can I return my glasses?",
+            "answer": "<p>Returns are accepted within 30 days of delivery, provided the frames are unworn and in original packaging.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer warranty support?",
+            "answer": "<p>Every pair includes a two-year limited warranty covering manufacturing defects.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

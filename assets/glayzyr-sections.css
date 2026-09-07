@@ -1,0 +1,319 @@
+/* GLAYZYR reusable section library — shared primitives.
+   Every rule is namespaced under .glayzyr-section so the file is safe to drop
+   into any Shopify theme without touching host global styles. */
+
+.glayzyr-section {
+  --glayzyr-bg: #ffffff;
+  --glayzyr-text: #0a0a0a;
+  --glayzyr-muted: color-mix(in srgb, var(--glayzyr-text) 55%, transparent);
+  --glayzyr-accent: #ff4d00;
+  --glayzyr-button-bg: #0a0a0a;
+  --glayzyr-button-text: #ffffff;
+  --glayzyr-radius: 20px;
+  --glayzyr-gap: clamp(20px, 3vw, 48px);
+  --glayzyr-max-width: 1440px;
+  --glayzyr-duration: 700ms;
+  --glayzyr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  box-sizing: border-box;
+  position: relative;
+  padding-block: var(--glayzyr-pad-top, 80px) var(--glayzyr-pad-bottom, 80px);
+  background: var(--glayzyr-bg);
+  color: var(--glayzyr-text);
+  overflow-x: clip;
+}
+
+.glayzyr-section *,
+.glayzyr-section *::before,
+.glayzyr-section *::after {
+  box-sizing: border-box;
+}
+
+.glayzyr-section__inner {
+  width: 100%;
+  max-width: var(--glayzyr-max-width);
+  margin-inline: auto;
+  padding-inline: clamp(18px, 5vw, 64px);
+}
+
+.glayzyr-eyebrow {
+  margin: 0 0 14px;
+  color: var(--glayzyr-accent);
+  font-size: clamp(0.66rem, 1.1vw, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.glayzyr-heading {
+  margin: 0 0 16px;
+  font-family: var(--font-heading--family, inherit);
+  font-size: clamp(2rem, 4.6vw, 3.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.glayzyr-body {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--glayzyr-muted);
+  font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.glayzyr-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 14px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--glayzyr-button-bg);
+  color: var(--glayzyr-button-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--glayzyr-duration) var(--glayzyr-ease), opacity 200ms;
+}
+
+.glayzyr-cta:hover {
+  transform: translateY(-2px);
+}
+
+.glayzyr-section :focus-visible {
+  outline: 2px solid var(--glayzyr-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Scroll reveal — JS adds [data-glayzyr-inview] once the element intersects. */
+.glayzyr-section [data-glayzyr-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--glayzyr-duration) var(--glayzyr-ease),
+    transform var(--glayzyr-duration) var(--glayzyr-ease);
+  transition-delay: var(--glayzyr-reveal-delay, 0ms);
+}
+
+.glayzyr-section [data-glayzyr-reveal][data-glayzyr-inview] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Rating snippet */
+.glayzyr-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.75rem, 1vw, 0.85rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.glayzyr-rating__stars {
+  position: relative;
+  display: inline-block;
+  color: color-mix(in srgb, var(--glayzyr-text) 20%, transparent);
+  letter-spacing: 0.06em;
+}
+
+.glayzyr-rating__stars::before {
+  content: '★★★★★';
+}
+
+.glayzyr-rating__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  width: var(--glayzyr-rating-fill, 0%);
+  color: var(--glayzyr-accent);
+}
+
+.glayzyr-rating__fill::before {
+  content: '★★★★★';
+}
+
+.glayzyr-rating__value {
+  font-weight: 700;
+}
+
+.glayzyr-rating__count {
+  color: var(--glayzyr-muted);
+}
+
+/* Product card snippet */
+.glayzyr-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--glayzyr-radius);
+  background: color-mix(in srgb, var(--glayzyr-text) 4%, var(--glayzyr-bg));
+  overflow: hidden;
+  text-align: left;
+}
+
+.glayzyr-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: color-mix(in srgb, var(--glayzyr-text) 6%, var(--glayzyr-bg));
+}
+
+.glayzyr-card__media img,
+.glayzyr-card__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.glayzyr-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(14px, 1.6vw, 22px);
+}
+
+.glayzyr-card__title {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.glayzyr-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.glayzyr-card__description {
+  margin: 0;
+  color: var(--glayzyr-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.glayzyr-card__price {
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  font-weight: 700;
+}
+
+.glayzyr-card__price s {
+  margin-inline-start: 8px;
+  color: var(--glayzyr-muted);
+  font-weight: 400;
+  font-size: 0.85em;
+}
+
+.glayzyr-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.glayzyr-card__actions .glayzyr-cta {
+  margin-top: 0;
+}
+
+.glayzyr-card__actions .glayzyr-cta--ghost {
+  background: transparent;
+  color: var(--glayzyr-text);
+  border: 1px solid color-mix(in srgb, var(--glayzyr-text) 25%, transparent);
+}
+
+.glayzyr-card__form {
+  display: contents;
+}
+
+/* Banner snippet — shared by the feature banner and the promo banner grid. */
+.glayzyr-banner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: var(--glayzyr-banner-height, clamp(320px, 55vh, 620px));
+  padding: clamp(24px, 4vw, 64px);
+  border-radius: var(--glayzyr-radius);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glayzyr-banner--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.glayzyr-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.glayzyr-banner__media img,
+.glayzyr-banner__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--glayzyr-banner-focal, center);
+  display: block;
+}
+
+.glayzyr-banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / var(--glayzyr-banner-overlay, 0.45));
+}
+
+.glayzyr-banner__content {
+  position: relative;
+  z-index: 2;
+  max-width: 46ch;
+}
+
+.glayzyr-banner--center .glayzyr-banner__content {
+  margin-inline: auto;
+}
+
+.glayzyr-banner__heading {
+  color: inherit;
+}
+
+.glayzyr-banner__body {
+  color: color-mix(in srgb, currentcolor 80%, transparent);
+  max-width: none;
+}
+
+.glayzyr-banner__overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glayzyr-section *,
+  .glayzyr-section *::before,
+  .glayzyr-section *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .glayzyr-section [data-glayzyr-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

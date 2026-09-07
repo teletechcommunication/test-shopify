@@ -1,0 +1,57 @@
+{% comment %}
+  Renders a compact star rating for a product.
+
+  Reads Shopify's standard `reviews.rating` / `reviews.rating_count` metafields
+  (written by Shopify Product Reviews and most review apps). When a store has no
+  review data yet, it falls back to the passed-in placeholder values so the
+  layout stays intact — swap the metafield namespace here to connect a
+  different review provider later.
+
+  Accepts:
+  - product: {Product} optional
+  - show_count: {Boolean} render the review count
+  - fallback_rating: {Number} used when no metafield exists
+  - fallback_count: {Number} used when no metafield exists
+
+  Usage:
+  {% render 'glayzyr-rating', product: product, show_count: true %}
+{% endcomment %}
+
+{% liquid
+  assign rating_value = null
+  assign rating_scale = 5
+  assign rating_count = 0
+
+  if product != blank and product.metafields.reviews.rating.value != blank
+    assign rating_value = product.metafields.reviews.rating.value.rating | times: 1.0
+    assign rating_scale = product.metafields.reviews.rating.value.scale_max | times: 1.0
+    assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  else
+    assign rating_value = fallback_rating | default: 4.8 | times: 1.0
+    assign rating_count = fallback_count | default: 0
+  endif
+
+  if rating_scale == 0
+    assign rating_scale = 5
+  endif
+
+  assign rating_percent = rating_value | divided_by: rating_scale | times: 100
+  assign rating_display = rating_value | round: 1
+%}
+
+{%- if rating_value > 0 -%}
+  <div
+    class="glayzyr-rating"
+    style="--glayzyr-rating-fill: {{ rating_percent }}%;"
+    role="img"
+    aria-label="{{ rating_display }} out of {{ rating_scale }} stars{% if rating_count > 0 %}, {{ rating_count }} reviews{% endif %}"
+  >
+    <span class="glayzyr-rating__stars" aria-hidden="true">
+      <span class="glayzyr-rating__fill"></span>
+    </span>
+    <span class="glayzyr-rating__value" aria-hidden="true">{{ rating_display }}</span>
+    {%- if show_count and rating_count > 0 -%}
+      <span class="glayzyr-rating__count" aria-hidden="true">({{ rating_count }})</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
