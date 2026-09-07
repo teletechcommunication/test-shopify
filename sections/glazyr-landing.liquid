@@ -1,0 +1,159 @@
+{% liquid
+  assign frame_template = 'glazyr-ezgif-frame-001.jpg' | asset_url
+  assign product_image = 'glazyr-glass.png' | asset_url
+%}
+
+<section
+  class="glazyr-landing"
+  data-glazyr-landing
+  data-frame-template="{{ frame_template }}"
+  data-glass-image="{{ product_image }}"
+  style="--glazyr-accent: {{ section.settings.accent_color }};"
+>
+  <div class="glazyr-landing__stage">
+    <canvas class="glazyr-landing__canvas" aria-hidden="true"></canvas>
+
+    <div class="glazyr-landing__intro" aria-live="polite">
+      <h2 data-glazyr-intro="one">{{ section.settings.intro_one }}</h2>
+      <h2 data-glazyr-intro="two">{{ section.settings.intro_two }}</h2>
+    </div>
+
+    <img class="glazyr-landing__glass" src="{{ product_image }}" alt="{{ section.settings.product_name }}">
+
+    <div class="glazyr-landing__brand">{{ section.settings.product_name }}</div>
+    <a class="glazyr-landing__top-cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+  </div>
+
+  <div class="glazyr-landing__story">
+    <article class="glazyr-landing__story-row glazyr-landing__story-row--left">
+      <div>
+        <p class="glazyr-landing__eyebrow">01 / Wearable intelligence</p>
+        <h3>{{ section.settings.feature_one_heading }}</h3>
+        <p>{{ section.settings.feature_one_text }}</p>
+      </div>
+    </article>
+    <article class="glazyr-landing__story-row glazyr-landing__story-row--right">
+      <div>
+        <p class="glazyr-landing__eyebrow">02 / Hands-free vision</p>
+        <h3>{{ section.settings.feature_two_heading }}</h3>
+        <p>{{ section.settings.feature_two_text }}</p>
+      </div>
+    </article>
+    <article class="glazyr-landing__story-row glazyr-landing__story-row--left">
+      <div>
+        <p class="glazyr-landing__eyebrow">03 / All-day design</p>
+        <h3>{{ section.settings.feature_three_heading }}</h3>
+        <p>{{ section.settings.feature_three_text }}</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="glazyr-landing__final">
+    <p class="glazyr-landing__eyebrow">{{ section.settings.product_name }}</p>
+    <h1>{{ section.settings.final_heading }}</h1>
+    <a class="glazyr-landing__button" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+  </div>
+</section>
+
+<style>
+  .glazyr-landing { background: #fff; color: #080808; overflow: clip; }
+  .glazyr-landing__stage { height: 500vh; position: relative; }
+  .glazyr-landing__canvas, .glazyr-landing__glass { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+  .glazyr-landing__canvas { z-index: 1; }
+  .glazyr-landing__glass { z-index: 3; opacity: 0; transform: scale(.68); }
+  .glazyr-landing__intro { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; text-align: center; pointer-events: none; padding: 24px; }
+  .glazyr-landing__intro h2 { position: absolute; max-width: 1100px; margin: 0; font-family: var(--font-heading--family); font-size: clamp(3.5rem, 10vw, 9rem); line-height: .88; letter-spacing: -.06em; text-transform: uppercase; opacity: 0; }
+  .glazyr-landing__brand, .glazyr-landing__top-cta { position: fixed; z-index: 5; top: 25px; }
+  .glazyr-landing__brand { left: 32px; font-family: var(--font-heading--family); font-size: 1.35rem; font-weight: 700; letter-spacing: .08em; }
+  .glazyr-landing__top-cta { right: 32px; color: #fff; background: #080808; padding: 12px 20px; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+  .glazyr-landing__story { position: relative; z-index: 4; margin-top: -100vh; pointer-events: none; }
+  .glazyr-landing__story-row { min-height: 100vh; display: flex; align-items: center; padding: 10vw 8vw; }
+  .glazyr-landing__story-row--right { justify-content: flex-end; text-align: right; }
+  .glazyr-landing__story-row > div { max-width: 430px; }
+  .glazyr-landing__story h3 { margin: 0 0 18px; font-family: var(--font-heading--family); font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: .95; letter-spacing: -.04em; }
+  .glazyr-landing__story p:not(.glazyr-landing__eyebrow) { margin: 0; color: #666; font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.5; }
+  .glazyr-landing__eyebrow { margin: 0 0 20px; color: var(--glazyr-accent); font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .glazyr-landing__final { min-height: 100vh; position: relative; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12vh 24px 14vh; text-align: center; }
+  .glazyr-landing__final h1 { margin: 0 0 42px; font-family: var(--font-heading--family); font-size: clamp(3.5rem, 9vw, 8rem); line-height: .88; letter-spacing: -.06em; text-transform: uppercase; }
+  .glazyr-landing__button { background: #080808; color: #fff; padding: 16px 28px; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+  @media (max-width: 749px) {
+    .glazyr-landing__brand { left: 18px; top: 18px; font-size: 1.05rem; }
+    .glazyr-landing__top-cta { right: 18px; top: 16px; padding: 10px 13px; }
+    .glazyr-landing__story-row { padding: 12vw 24px; }
+    .glazyr-landing__story-row--right { text-align: left; justify-content: flex-start; }
+    .glazyr-landing__glass { transform: scale(.92); }
+  }
+</style>
+
+<script>
+  (() => {
+    const landing = document.querySelector('[data-glazyr-landing]');
+    if (!landing || landing.dataset.glazyrReady) return;
+    landing.dataset.glazyrReady = 'true';
+    const canvas = landing.querySelector('.glazyr-landing__canvas');
+    const context = canvas.getContext('2d');
+    const glass = landing.querySelector('.glazyr-landing__glass');
+    const introOne = landing.querySelector('[data-glazyr-intro="one"]');
+    const introTwo = landing.querySelector('[data-glazyr-intro="two"]');
+    const frameTemplate = landing.dataset.frameTemplate;
+    const frames = Array.from({ length: 121 }, (_, index) => {
+      const image = new Image();
+      image.src = frameTemplate.replace('001.jpg', `${String(index + 1).padStart(3, '0')}.jpg`);
+      return image;
+    });
+    let lastFrame = -1;
+
+    const progress = () => {
+      const bounds = landing.getBoundingClientRect();
+      return Math.max(0, Math.min(1, -bounds.top / (landing.offsetHeight - window.innerHeight)));
+    };
+    const draw = (frameIndex) => {
+      const image = frames[frameIndex];
+      if (!image || !image.complete || !image.naturalWidth) return;
+      const ratio = Math.min(canvas.clientWidth / image.naturalWidth, canvas.clientHeight / image.naturalHeight);
+      canvas.width = canvas.clientWidth * devicePixelRatio;
+      canvas.height = canvas.clientHeight * devicePixelRatio;
+      context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+      const width = image.naturalWidth * ratio;
+      const height = image.naturalHeight * ratio;
+      context.drawImage(image, (canvas.clientWidth - width) / 2, (canvas.clientHeight - height) / 2, width, height);
+    };
+    const update = () => {
+      const value = progress();
+      const frame = Math.min(120, Math.floor((value / .4) * 120));
+      if (frame !== lastFrame && value < .46) { lastFrame = frame; draw(frame); }
+      canvas.style.opacity = value > .4 ? Math.max(0, 1 - ((value - .4) / .05)) : 1;
+      glass.style.opacity = value > .4 ? Math.min(1, (value - .4) / .05) : 0;
+      glass.style.transform = `translateX(${value < .55 ? 0 : value < .6 ? (value - .55) * 500 : value < .7 ? (0.6 - value) * 500 : value < .8 ? (value - .7) * 500 : (0.9 - value) * 250}%) scale(${value < .55 ? 1 : .68}) rotate(${value < .6 ? 0 : value < .7 ? -8 : value < .8 ? 8 : 0}deg)`;
+      introOne.style.opacity = value >= .05 && value < .2 ? Math.min(1, (value - .05) * 20, (0.2 - value) * 20) : 0;
+      introTwo.style.opacity = value >= .22 && value < .37 ? Math.min(1, (value - .22) * 20, (0.37 - value) * 20) : 0;
+      requestAnimationFrame(update);
+    };
+    frames[0].addEventListener('load', () => draw(0), { once: true });
+    window.addEventListener('resize', () => draw(Math.max(0, lastFrame)), { passive: true });
+    update();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "GLAZYR landing",
+  "settings": [
+    { "type": "text", "id": "product_name", "label": "Product name", "default": "GLAZYR" },
+    { "type": "text", "id": "intro_one", "label": "First statement", "default": "See Beyond." },
+    { "type": "text", "id": "intro_two", "label": "Second statement", "default": "Smartness, In Your Sight." },
+    { "type": "text", "id": "feature_one_heading", "label": "Feature one heading", "default": "Technology You Can Wear" },
+    { "type": "textarea", "id": "feature_one_text", "label": "Feature one text", "default": "Every component is miniaturized and optimized to fit seamlessly into a classic frame design." },
+    { "type": "text", "id": "feature_two_heading", "label": "Feature two heading", "default": "See. Capture. Connect." },
+    { "type": "textarea", "id": "feature_two_text", "label": "Feature two text", "default": "Experience the world without holding a screen. Capture moments exactly as you see them." },
+    { "type": "text", "id": "feature_three_heading", "label": "Feature three heading", "default": "Designed Around You" },
+    { "type": "textarea", "id": "feature_three_text", "label": "Feature three text", "default": "Lightweight, durable materials ensure all-day comfort while maintaining a premium aesthetic." },
+    { "type": "text", "id": "final_heading", "label": "Final heading", "default": "The New Reality." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Buy now" },
+    { "type": "url", "id": "button_link", "label": "Button link", "default": "/collections/all" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#ff4d00" }
+  ],
+  "presets": [{ "name": "GLAZYR landing" }]
+}
+{% endschema %}
